@@ -1,3 +1,4 @@
+import ast
 from typing import List
 import weave
 import re
@@ -29,5 +30,18 @@ def eval_majority_vote(output: List[str], answer: str):
 
 @weave.op()
 def eval_multi_choice(output: str, answer: str):
-    model_answer = extract_answer(output)
+    # model_answer = extract_answer(output)
+    # return model_answer == answer
+    if "json" in output:
+        cleaned_string = output.replace("```json", "").replace("```", "").strip()
+        # Convert the cleaned string to a valid dictionary
+        data = eval(cleaned_string)  # Use eval cautiously or replace with a safer parser if needed
+        cleansed_output = data.get('answer')
+        model_answer = cleansed_output
+    else:
+        cleansed_output = ast.literal_eval(output)
+        model_answer = cleansed_output["answer"]
+        print("model_answer ", model_answer)
+
     return model_answer == answer
+

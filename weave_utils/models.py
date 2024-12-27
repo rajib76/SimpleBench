@@ -61,6 +61,7 @@ class LiteLLMModel(weave.Model):
             self.temp = None
             self.top_p = None
             self.max_tokens = None
+            self.system_prompt = None
 
     
     @weave.op()
